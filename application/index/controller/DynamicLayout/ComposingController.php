@@ -95,9 +95,9 @@ ORDER BY dPreDate";
     {
         $query = Request::param();
         $page = $query['page'] - 1;
-        $countData = Db::table('chick_storageTable')->field('id')->select();
+        $countData = Db::table('chick_LiuYanDisPath')->field('id')->select();
         $total = count($countData);
-        $Hang = Db::table('chick_storageTable')->limit($page * 10, 10)
+        $Hang = Db::table('chick_LiuYanDisPath')->limit($page * 10, 10)
             ->order('spec desc')
             ->select();
         foreach ($Hang as $key => $item) {

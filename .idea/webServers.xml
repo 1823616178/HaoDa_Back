@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="713bd5b2-b661-4b0a-ad1f-cdc87044a938" name="Haoda" url="http://118.24.131.216">
+        <fileTransfer host="118.24.131.216" port="20005" rootFolder="/Users/lx182/Documents/tp" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="20005" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
