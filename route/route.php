@@ -25,6 +25,7 @@ Route::group("login", function () {
     Route::rule('/newUserPasswdRole', 'Index/Login.Login/newUserPasswdRole');
     Route::rule('/AddRoleLocalTrue', 'Index/Login.Login/AddRoleLocalTrue');
     Route::rule('/DelectRoleList', 'Index/Login.Login/DelectRoleList');
+    Route::rule('/UpdataRoleTest', 'Index/Login.Login/UpdataRoleTest');
 })->allowCrossDomain();
 Route::group('user', function () {
     Route::rule('/info', 'Index/Login.Login/userInfo');

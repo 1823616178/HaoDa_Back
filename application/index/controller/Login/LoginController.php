@@ -37,7 +37,8 @@ class LoginController extends BaseController
         $jwtAuth = json_encode(JWT::decode($token['jwt'], $key, array("HS256")));
         $jwtAuth = json_decode($jwtAuth, true);
         $userid = $jwtAuth['user_id'];
-        $data = Db::table('chick_test_role')->where('Userid', $userid)->field('path')->find();
+        $data1 = Db::table('ckick_user')->where('id', $userid)->find();
+        $data = Db::table('chick_test_role')->where('id', $data1['roleid'])->find();
         $route = json_decode($data['path'], true);
         return $route;
     }
@@ -66,7 +67,6 @@ class LoginController extends BaseController
         $data = json_decode($data, true);
         $data = $data['jwt'];
         $key = md5("nobita");
-//        $data = Request::param();
         $jwtAuth = json_encode(JWT::decode($data, $key, array("HS256")));
         $authInfo = json_decode($jwtAuth, true);
         $userinfo = LoginModel::where('id', $authInfo['user_id'])->find();
@@ -81,110 +81,6 @@ class LoginController extends BaseController
         return $data;
     }
 
-//        public function GetPageRule()
-//        {
-//            $id = Request::post();
-//            $arr = [];
-//            $arr2 = [];
-//            $data = Db::table('RoleModulePermission')->alias('a')->where('RoleId', 2)->select();
-//            foreach ($data as $key => $datum) {
-//                $data2 = Db::table('chick_rule')->where('id', $datum['PermissionId'])->select();
-//                if (count($data2) != 0) {
-//                    $arr[$key] = $data2;
-//                    foreach ($data2 as $keys => $item) {
-//                        $arr2[$key]['path'] = $item['path'];
-//                        $child = Db::table('chick_rule_two')->where('ruleId', $item['id'])->select();
-//                        foreach ($child as $k => $ittem) {
-//                            $arr2[$key]['children'][$k]['path'] = $child[$k]['path'];
-//                        }
-//                    }
-//                }
-//            }
-//
-//            return array('routes' => $arr2);
-//        }
-
-//    public function GetPageRule()
-//    {
-//        $id = Request::post();
-//        $arr = [];
-//        $arr2 = [];
-//        $val = 0;
-//        $vval = 0;
-//        $data = Db::table('RoleModulePermission')->alias('a')->where(['RoleId' => $id["data"], 'IsDeleted' => 0])->select();
-//        foreach ($data as $key => $datum) {
-//            $data2 = Db::table('chick_rule')->where('id', $datum['PermissionId'])->select();
-//            foreach ($data2 as $kes => $value) {
-//                if (empty($value['two_id'])) {
-//                    $arr[$val]['path'] = $value['path'];
-//                    $arr[$val]['id'] = $value['id'];
-//                    $val += 1;
-//                } else {
-//                    $arr2[$key] = $value;
-//                }
-//            }
-//
-//            foreach ($arr2 as $key => $value) {
-//                foreach ($arr as $kk => $item) {
-//                    if ($arr[$kk]['id'] == $arr2[$key]['two_id']) {
-//                        $arr[$kk]['children'][$key] = ['path' => $arr2[$key]['path']];
-//                    }
-//                }
-//            }
-//            $arr3 = [];
-//            $v = 0;
-//            foreach ($arr as $ke => $value) {
-//                $arr3[$ke]['path'] = $value['path'];
-//                if (!empty($value['children'])) {
-//                    $v = 0;
-//                    foreach ($value['children'] as $key => $item) {
-//                        $arr3[$ke]['children'][$v] = $item;
-//                        $v += 1;
-//                    }
-//                }
-//            }
-//
-//        }
-//
-//        return array('routes' => $arr3);
-//    }
-
-//    public function AcceptRoleData()
-//    {
-//        $data = Request::param();
-//        $id = $data['id'];
-//        $role = $data['role']['routes'];
-//        $arr = [];
-//        foreach ($role as $key => $value) {
-////            $data2 = Db::table('chick_rule')->where('path', $value['path'])->field('id')->find();
-////            $arr[$key] = $data2;
-//            foreach ( $role[$key]['children'] as $cc =>$role2 ) {
-//                return $role2;
-//                $data2 = Db::table('chick_rule')->where('path', $value['children']['path'])->field('id')->find();
-//                $arr[$key] = $data2;
-//            }
-//        }
-//        $val = 0;
-//        $kka = [];
-//        foreach ($arr as $k => $items) {
-//            $val = $items['id'];
-////            Db::table('RoleModulePermission')->where(['RoleId' => $id])
-////                ->update(['IsDeleted' => 1]);
-//            $st = Db::table('RoleModulePermission')->where(['RoleId' => $id, 'PermissionId' => $val])->find();
-//            if (empty($st)) {
-//                $help = [
-//                    'IsDeleted' => 0,
-//                    'RoleId' => $id,
-//                    'ModuleId' => 1,
-//                    'PermissionId' => $val,
-//                ];
-//                $a = Db::table('RoleModulePermission')->insert($help);
-//            }
-//            $kka[$k] = $st;
-//        }
-//        return $kka;
-//
-//    }
 
     public function GetPageRule()
     {
@@ -198,20 +94,12 @@ class LoginController extends BaseController
     {
         $data = Request::param();
         $id = $data['id'];
-        if (empty($id)) {
-            return $data;
-        } else {
-            $da = Db::table('chick_test_role')->where('Userid', $id)->find();
-            $arr = [
-                'Userid' => $data['id'],
-                'path' => json_encode($data['role']['routes'])
-            ];
-            if (!empty($da)) {
-                Db::table('chick_test_role')->where('Userid', $id)->update($arr);
-            } else {
-                Db::table('chick_test_role')->insert($arr);
-            }
-        }
+        $arr = [
+            'Userid' => $data['id'],
+            'path' => json_encode($data['role']['routes'])
+        ];
+        $status = Db::table('chick_test_role')->where('id', $id)->update($arr);
+        return $status;
     }
 
     public function newRole()
@@ -305,5 +193,13 @@ class LoginController extends BaseController
         $id = $reqery['id'];
         $status = Db::table('chick_test_role')->where('id', $id)->delete();
         return array('code' => $status);
+    }
+
+    public function UpdataRoleTest()
+    {
+        $requests = Request::param('role');
+        $status = Db::table('chick_test_role')->insert(["role" => $requests['role'], 'describe' => $requests['describe'],
+            'path' => json_encode($requests['routes'])]);
+        return $status;
     }
 }
